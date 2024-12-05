@@ -6,7 +6,7 @@
 /*   By: bouhammo <bouhammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 19:31:31 by bouhammo          #+#    #+#             */
-/*   Updated: 2024/11/30 12:12:16 by bouhammo         ###   ########.fr       */
+/*   Updated: 2024/12/01 11:06:39 by bouhammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,28 +65,6 @@ void       draw_line_dda(t_start *var)
         i++;
     }
 }
-// if (mlx->ply->l_r == 1) //move right
-// 	{
-// 		move_x = -sin(mlx->ply->angle) * PLAYER_SPEED;
-// 		move_y = cos(mlx->ply->angle) * PLAYER_SPEED;
-// 	}
-// 	if (mlx->ply->l_r == -1) //move left
-// 	{
-// 		move_x = sin(mlx->ply->angle) * PLAYER_SPEED;
-// 		move_y = -cos(mlx->ply->angle) * PLAYER_SPEED;
-// 	}
-// 	if (mlx->ply->u_d == 1) //move up
-// 	{
-// 		move_x = cos(mlx->ply->angle) * PLAYER_SPEED;
-// 		move_y = sin(mlx->ply->angle) * PLAYER_SPEED;
-// 	}
-// 	if (mlx->ply->u_d == -1) //move down
-// 	{
-// 		move_x = -cos(mlx->ply->angle) * PLAYER_SPEED;
-// 		move_y = -sin(mlx->ply->angle) * PLAYER_SPEED;
-// 	} 
-
-
 
 
 void move_player_up(t_start *var, int dx, int dy)

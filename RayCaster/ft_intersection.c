@@ -6,7 +6,7 @@
 /*   By: bouhammo <bouhammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 21:58:25 by bouhammo          #+#    #+#             */
-/*   Updated: 2024/11/30 13:50:01 by bouhammo         ###   ########.fr       */
+/*   Updated: 2024/12/01 19:44:12 by bouhammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void       dda(t_start *var)
 
 void    drawing_line( t_start *var, int coor_a_x, int coor_a_y, int coor_b_x, int coor_b_y)
 {
+
     int dx = abs(coor_b_x - coor_a_x);
     int dy = abs(coor_b_y - coor_a_y);
     int sx = (coor_a_x < coor_b_x) ? 1 : -1; 
@@ -67,10 +68,11 @@ void    drawing_line( t_start *var, int coor_a_x, int coor_a_y, int coor_b_x, in
             return ;
         }
         
-            mlx_put_pixel(var->img, coor_a_x, coor_a_y, 0xFFFFFF);
-
         if (coor_a_x == coor_b_x || coor_a_y == coor_b_y)
             break;
+            
+            mlx_put_pixel(var->img, coor_a_x, coor_a_y, 0xFFFFFF);
+
         int e2 = 2 * err;
         if (e2 > -dy)
         {
@@ -109,9 +111,9 @@ int check_is_wall(t_start *var, double x, double y)
     printf(" va->map [%c] \n\n", var->map[map_y][map_x]);
     if (var->map[map_y][map_x] == '1')
         return 0;
-
     return 1;
 }
+
 
 t_position_intersec  	git_first_x_intersection( t_start *var)
 {
@@ -124,36 +126,35 @@ t_position_intersec  	git_first_x_intersection( t_start *var)
     double x_inter = 0;
     double x_step = 0;
     double y_step = 0;
-    if(is_looking_up(var->ray->ray_angle)== true)
+    if(is_looking_up(var->draw->angle)== true)
     {
-        y_inter =   (floor(var->move->coor_y / TILE_SIZE)) * (TILE_SIZE   - 1);
-        y_step = - TILE_SIZE;
+        y_inter =  ((floor(var->move->coor_y / TILE_SIZE)) * TILE_SIZE )  - 1;
+        y_step = -TILE_SIZE;
     }
-    if(is_looking_down(var->ray->ray_angle) == true)
+    if(is_looking_down(var->draw->angle) == true)
     {
-        y_inter =   (floor(var->move->coor_y / TILE_SIZE) * TILE_SIZE) + TILE_SIZE;
+        // printf(" --------------------------------------  ----------   ------  \n");
+        y_inter = ((floor(var->move->coor_y / TILE_SIZE) * TILE_SIZE)) + TILE_SIZE;
         y_step = TILE_SIZE;
     }
-    if( chack_angle(rad_to_deg(var->ray->ray_angle)) == 1)
-    {
-        inter.retur = 0;
-        return inter;
-    }
-    x_inter =  (y_inter - var->move->coor_y) / tan(var->ray->ray_angle)  + var->move->coor_x;
-    x_step = y_step / tan(var->ray->ray_angle);
+    // if( chack_angle(rad_to_deg(var->draw->angle)) == 1)
+    // {
+    //     inter.retur = 0;
+    //     return inter;
+    // }
+    x_inter =  ((y_inter - var->move->coor_y) / tan(var->draw->angle))  + var->move->coor_x;
+    x_step = y_step / tan(var->draw->angle);
 
-    printf(" *************************************     [-->  %f]   \n\n", rad_to_deg(var->ray->ray_angle));
+    printf(" *************************************     [-->  %f]   \n\n", rad_to_deg(var->draw->angle));
     while (check_is_wall(var , x_inter ,y_inter ) == 1)
     {
-        // printf(" x_inter [%f] \n\n", x_inter);
-        // printf(" y_inter [%f] \n\n", y_inter);
-
         x_inter += x_step;
         y_inter += y_step;
-        inter.x = x_inter;
-        inter.y = y_inter;
     }
-    drawing_line(var, var->move->coor_x, var->move->coor_y, inter.x, inter.y );
+    inter.x = x_inter;
+    inter.y = y_inter;
+
+    // drawing_line(var, var->move->coor_x, var->move->coor_y, inter.x, inter.y );
     inter.distance = sqrt(pow((x_inter - var->move->coor_x), 2) + pow((y_inter - var->move->coor_y), 2));
 	return inter;
 }
@@ -165,30 +166,36 @@ t_position_intersec git_first_y_intersection(t_start *var)
     inter.x = 0;
     inter.y = 0;
     inter.distance = -1;
+    inter.retur = -1;
 
     double x_inter = 0;
     double y_inter = 0;
     double x_step = 0;
     double y_step = 0;
-    if(is_looking_right(var->ray->ray_angle) == true)
+
+    
+    if(is_looking_right(var->draw->angle) == true)
     {
-        // printf(" ++++++++++++++++++++++++++++++++++++++++ \n");
-        x_inter =   (floor(var->move->coor_x / TILE_SIZE) * TILE_SIZE) + TILE_SIZE;
+        printf("   ........................ OK 1  ................   \n\n");
+        x_inter =   ((floor((var->move->coor_x / TILE_SIZE))) * TILE_SIZE ) + TILE_SIZE;
         x_step = TILE_SIZE;
     }
-    if(is_looking_left(var->ray->ray_angle) == true)
+    else
     {
-        // printf(" --------------------------------------  ----------   ------  \n");
-        x_inter =   (floor(var->move->coor_x / TILE_SIZE)) * (TILE_SIZE   - 1);
-        x_step = - TILE_SIZE;
+        printf("   ........................ OK  2 ................   \n\n");
+        x_inter =   ((floor(var->move->coor_x / TILE_SIZE)) * TILE_SIZE)  - 1;
+        x_step = -TILE_SIZE;
     }
-    if( chack_angle(rad_to_deg(var->ray->ray_angle)) == 1)
+    if( chack_angle(rad_to_deg(var->draw->angle)) == 1)
         return inter;
-    y_inter =  (x_inter - var->move->coor_x) * tan(var->ray->ray_angle)  + var->move->coor_y;
-    y_step = x_step * tan(var->ray->ray_angle);
+    y_inter =  var->move->coor_y +  ((var->move->coor_x - x_inter ) * tan(var->draw->angle) ) ;
+    y_step = (x_step * tan(var->draw->angle));
 
-    var->ray->x_inter = x_inter;
-    var->ray->y_inter = y_inter;
+    printf(" *************************************     [-->  %f]   \n\n", rad_to_deg(var->draw->angle));
+
+
+    // var->ray->x_inter = x_inter;
+    // var->ray->y_inter = y_inter;
 
     while (check_is_wall(var , x_inter ,y_inter ) == 1)
     {
@@ -197,6 +204,7 @@ t_position_intersec git_first_y_intersection(t_start *var)
     }
     inter.x = x_inter;
     inter.y = y_inter;
+    drawing_line(var, var->move->coor_x, var->move->coor_y, x_inter, y_inter );
     inter.distance = sqrt(pow((x_inter - var->move->coor_x), 2) + pow((y_inter - var->move->coor_y), 2));
     return inter;
 }
@@ -204,32 +212,46 @@ t_position_intersec git_first_y_intersection(t_start *var)
 
 void	ft_intersection(t_start *var )
 {
-	t_position_intersec inter_x;
+	// // t_position_intersec inter_x;
 	// t_position_intersec inter_y;
 
-    inter_x = git_first_x_intersection(var);
+    // // inter_x = git_first_x_intersection(var);
     // inter_y = git_first_y_intersection(var);
-    // if (inter_x.retur != 0)
-    // {
-    //     drawing_line(var, var->move->coor_x, var->move->coor_y, inter_x.x, inter_x.y );
-    // }
+
+
+
+
+
+    // t_position_intersec inter_x;
+	t_position_intersec inter_y;
+
+    // inter_x = git_first_x_intersection(var);
+    inter_y = git_first_y_intersection(var);
+  
     
-    // if(inter_x.distance < inter_y.distance)
-    // {
-    // }
-    // else
-    // {
-    //     drawing_line(var, var->move->coor_x, var->move->coor_y, inter_y.x, inter_y.y );        
-    // }
+  
 
-
+    // int ray=0;
+	// while ( ray <= NUM_RAYS)
+	// {
+		
+    //     if(inter_x.distance < inter_y.distance)
+    //     {
+    //         drawing_line(var, var->move->coor_x, var->move->coor_y, inter_x.x, inter_x.y );
+    //     }
+    //     else
+    //     {
+    //         drawing_line(var, var->move->coor_x, var->move->coor_y, inter_y.x, inter_y.y );        
+    //     }
+	// 	ray++;
+	// }
 
         // new_y = git_first_y_intersection(var);
     // while (1)
     // {
     //     if( check_is_wall(var) == 1)
     //         break;
-    //     // var->ray->ray_angle += deg_to_rad( rad_to_deg(FOV_ANGLE) / NUM_RAYS);
+    //     // var->draw->angle += deg_to_rad( rad_to_deg(FOV_ANGLE) / NUM_RAYS);
     // }
 
 

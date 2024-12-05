@@ -6,7 +6,7 @@
 /*   By: bouhammo <bouhammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:38:12 by bouhammo          #+#    #+#             */
-/*   Updated: 2024/11/30 13:46:15 by bouhammo         ###   ########.fr       */
+/*   Updated: 2024/12/01 13:44:24 by bouhammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,44 +41,89 @@ void move_player(t_start *var, int dx, int dy)
 }
 
 
+// void change_deriction(mlx_key_data_t keydata, t_start *var)
+// {
+//     if (keydata.action == MLX_RELEASE || keydata.action == MLX_REPEAT)
+//     {
+//         if (keydata.key == MLX_KEY_RIGHT)
+//         {
+// 			mlx_delete_image(var->mlx, var->img);
+// 			print_pixel(var);
+// 			print_pixel_player(var);
+// 			ft_intersection(var);
+			
+//             var->draw->angle = deg_to_rad(fmod(rad_to_deg(var->draw->angle) + 5, 360));
+// 			var->ray->ray_angle = deg_to_rad(fmod(rad_to_deg(var->draw->angle) - (rad_to_deg(FOV_ANGLE) / 2) + 360, 360));
+// 		}
+//         else if (keydata.key == MLX_KEY_LEFT)
+//         {
+// 			mlx_delete_image(var->mlx, var->img);
+// 			print_pixel(var);
+// 			print_pixel_player(var);
+// 			ft_intersection(var);
+
+//             var->draw->angle = deg_to_rad(fmod(rad_to_deg(var->draw->angle) - 5 + 360, 360));
+// 			var->ray->ray_angle = deg_to_rad(fmod(rad_to_deg(var->draw->angle) - (rad_to_deg(FOV_ANGLE) / 2) + 360, 360));
+        
+//         }
+//     }
+// }
+
 void change_deriction(mlx_key_data_t keydata, t_start *var)
 {
-	// if (keydata.key == MLX_KEY_RIGHT || keydata.key == MLX_KEY_LEFT)
-	// 		ft_intersection(var);
-
     if (keydata.action == MLX_RELEASE || keydata.action == MLX_REPEAT)
     {
         if (keydata.key == MLX_KEY_RIGHT)
         {
+			int y = 1;
+            var->draw->angle += deg_to_rad(  5 ) * y;
+			if(rad_to_deg(var->draw->angle ) > 360)
+			{
+				var->draw->angle = deg_to_rad(rad_to_deg(var->draw->angle) - 360);
+			}
+
 			mlx_delete_image(var->mlx, var->img);
 			print_pixel(var);
 			print_pixel_player(var);
 			ft_intersection(var);
 			
-            var->draw->angle = deg_to_rad(fmod(rad_to_deg(var->draw->angle) + 5, 360));
-			// printf("-----> [%f]\n", rad_to_deg(var->draw->angle));
+			// var->draw->angle = deg_to_rad(fmod(rad_to_deg(var->draw->angle) + 360, 360));
+			// if(rad_to_deg(var->draw->angle ) >= 360)
+			// {
+			// 	var->draw->angle = deg_to_rad(rad_to_deg(var->draw->angle) - 360);
+			// }
 			
-			var->ray->ray_angle = deg_to_rad(fmod(rad_to_deg(var->draw->angle) - (rad_to_deg(FOV_ANGLE) / 2) + 360, 360));
-            // var->ray->ray_angle = deg_to_rad(rad_to_deg(var->draw->angle) - (rad_to_deg(FOV_ANGLE) / 2));
-			// printf(" ????? > [%f]\n", rad_to_deg(var->ray->ray_angle));
-			
+			// var->ray->ray_angle = deg_to_rad(fmod(rad_to_deg(var->draw->angle) - (rad_to_deg(FOV_ANGLE) / 2) + 360, 360));
 		}
         else if (keydata.key == MLX_KEY_LEFT)
         {
+			int y = -1;
+            var->draw->angle += deg_to_rad(  5 ) * y;
+			if (rad_to_deg(var->draw->angle) < 0)
+			{
+				var->draw->angle = deg_to_rad(rad_to_deg(var->draw->angle) + 360);
+			}
+
+			
 			mlx_delete_image(var->mlx, var->img);
 			print_pixel(var);
 			print_pixel_player(var);
 			ft_intersection(var);
 
-            var->draw->angle = deg_to_rad(fmod(rad_to_deg(var->draw->angle) - 5 + 360, 360));
-			// printf("-----> [%f]\n", rad_to_deg(var->draw->angle));
-			var->ray->ray_angle = deg_to_rad(fmod(rad_to_deg(var->draw->angle) - (rad_to_deg(FOV_ANGLE) / 2) + 360, 360));
-			// printf(" ????? > [%f]\n", rad_to_deg(var->ray->ray_angle));
+			
+			// var->draw->angle = deg_to_rad(fmod(rad_to_deg(var->draw->angle) + 360, 360));
+
+            // var->draw->angle = deg_to_rad(rad_to_deg(var->draw->angle) - 5);
+			// if(rad_to_deg(var->draw->angle ) < 0)
+			// {
+			// 	var->draw->angle = deg_to_rad(rad_to_deg(var->draw->angle) + 360);
+			// }
+            // var->draw->angle = deg_to_rad(fmod(rad_to_deg(var->draw->angle) - 5 + 360, 360));
+			// var->ray->ray_angle = deg_to_rad(fmod(rad_to_deg(var->draw->angle) - (rad_to_deg(FOV_ANGLE) / 2) + 360, 360));
         
         }
     }
 }
-
 
 void 	use_hook(mlx_key_data_t keydata, void* param)
 {
