@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ray.c                                              :+:      :+:    :+:   */
+/*   draw_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bouhammo <bouhammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 15:40:33 by bouhammo          #+#    #+#             */
-/*   Updated: 2024/11/24 22:52:22 by bouhammo         ###   ########.fr       */
+/*   Updated: 2024/12/12 20:29:32 by bouhammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,10 @@ void	print_pixel( t_start  *var)
 			if(var->map[i][j] == '1' )
 			{
 				int k = y_map;
-				while (k < y_map + TILE_SIZE -1)
+				while (k < y_map + TILE_SIZE )
 				{
 					int len = x_map;
-					while (len < x_map + TILE_SIZE - 1 )
+					while (len < x_map + TILE_SIZE  )
 					{
 						mlx_put_pixel(tmp->img, len , k, 0x000004FF );
 						len++;
@@ -62,10 +62,10 @@ void	print_pixel( t_start  *var)
 			if(var->map[i][j] == '0' || ft_caracter(var->map[i][j]) == 1)
 			{
 				int k = y_map;
-				while (k < y_map + TILE_SIZE -1)
+				while (k < y_map + TILE_SIZE )
 				{
 					int len = x_map ;
-					while (len < x_map + TILE_SIZE - 1 )
+					while (len < x_map + TILE_SIZE  )
 					{
 						mlx_put_pixel(tmp->img, len , k,  0x6A5AF);
 						len++;
@@ -142,5 +142,7 @@ void	ft_game_is_over(t_start *var)
 
 	print_pixel(var);
 	print_pixel_player(var );
-    draw_line_dda(var);
+    // draw_line_dda(var);
+	ft_intersection(var);
+
 }

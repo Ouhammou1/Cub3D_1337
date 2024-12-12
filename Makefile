@@ -9,7 +9,7 @@ SRCM= ./get_next_line_1/get_next_line.c \
 		ft_map.c \
 		ft_rgb_cnfg.c \
 		game.c \
-		RayCaster/ray.c   RayCaster/start_game.c   RayCaster/ft_func_maths.c RayCaster/move_plyer.c \
+		RayCaster/draw_map.c   RayCaster/start_game.c   RayCaster/ft_func_maths.c RayCaster/move_plyer.c \
 		RayCaster/ft_intersection.c\
 
 OBJ= ${SRCM:.c=.o}

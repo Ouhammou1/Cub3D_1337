@@ -5,6 +5,7 @@
 # include "./get_next_line_1/get_next_line.h"
 # include "./libft_1/libft.h"
 # include <fcntl.h>
+#include <limits.h>
 
 // the libriry we delete
 # include <stdio.h>
@@ -12,10 +13,11 @@
 
 # define TILE_SIZE 60
 # define FOV_ANGLE (60 * ( M_PI / 180))
-# define NUM_RAYS 60
-#define EPSILON 0.00001
-#define PLAYER_SPEED  5 
-
+# define NUM_RAYS  var->move->width_x
+// #define EPSILON 0.00001
+#define PLAYER_SPEED  15 
+// #define move_speed  10
+#define PLAYER_ROTATION_SPEED  10
 
 
 typedef struct s_elements
@@ -41,10 +43,12 @@ typedef struct s_move
 	double	coor_y;
 	double 	width_x;
 	double 	height_y;
-	double  flag_up;
-	double  flag_down;
-	double  flag_right;
-	double  flag_left;
+
+	double  turn_direction;
+	double  walk_direction;
+	double  rotation_angle;
+	double  rotation_speed;
+	double  move_speed;
 }					t_move_player;
 
 typedef struct	s_draw_line  
@@ -60,8 +64,10 @@ typedef struct s_rays
 	double  ray_angle;
 	double	last_ray_angle;
 	double  distance;
-	double  x_inter;
-	double  y_inter;
+	double  x_inter_vertical ;
+	double  y_inter_vaertical;
+	double  x_inter_horizontal;
+	double  y_inter_horizontal;
 	int 	ray_flag;
 }	t_rays;
 
@@ -173,10 +179,13 @@ void		ft_error();
 
 void	print_pixel_player(t_start *var    );
 ////////////////////        MOVE PLYER
-void move_player_up(t_start *var, int dx, int dy);
-void move_player_down(t_start *var, int dx, int dy);
-void move_player_right(t_start *var, int dx, int dy);
-void move_player_left(t_start *var, int dx, int dy);
+// void move_player_up(t_start *var, int dx, int dy);
+// void move_player_down(t_start *var, int dx, int dy);
+// void move_player_right(t_start *var, int dx, int dy);
+// void move_player_left(t_start *var, int dx, int dy);
+void move_player( mlx_key_data_t keydata, t_start *var);
+void fix_rays(mlx_key_data_t keydata, t_start *var);
+
 
 int check_map_lft_right(t_start *var , int new_position_y ,int new_position_x);
 int check_player_in_map(t_start *var, int new_position_x, int new_position_y);
@@ -196,10 +205,11 @@ bool is_looking_up(double angle);
 bool  is_looking_down(double angle);
 bool is_looking_right(double angle);
 bool is_looking_left(double angle);	
+double normalize_angle(double angle);
 
 
-
-
-
+void ft_put_pixel_1(t_start *var, double x, double y);	
+void  initialize_flags(mlx_key_data_t keydata, t_start *var);
+int check_is_wall(t_start *var, double x, double y);
 
 #endif
