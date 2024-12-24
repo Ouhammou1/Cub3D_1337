@@ -6,19 +6,24 @@
 /*   By: bouhammo <bouhammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 19:31:31 by bouhammo          #+#    #+#             */
-/*   Updated: 2024/12/12 20:22:10 by bouhammo         ###   ########.fr       */
+/*   Updated: 2024/12/23 10:46:22 by bouhammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub.h"
+void ft_put_pixel_color(t_start *var, double x, double y , int color)
+{
+    if (x >= 0 && x < var->move->width_x && y >= 0 && y < var->move->height_y)
+        mlx_put_pixel(var->img, x, y,   color);
+}
 
 void ft_put_pixel_1(t_start *var, double x, double y)
 {
 
     if (x >= 0 && x < var->move->width_x && y >= 0 && y < var->move->height_y)
-    {
-        mlx_put_pixel(var->img, x, y,   0xFFFFFF);
-    }
+        mlx_put_pixel(var->img, x, y,   0xFFFF00FF);
+    // {
+    // }
 }
 
 void ft_put_pixel(t_start *var, double x, double y)
@@ -26,7 +31,7 @@ void ft_put_pixel(t_start *var, double x, double y)
 
     if (x >= 0 && x < var->move->width_x && y >= 0 && y < var->move->height_y)
     {
-        mlx_put_pixel(var->img, x, y,   0xFFFF00FF);
+        mlx_put_pixel(var->img, x, y,   0xFFFFFF  ) ; // 0xFFFF00FF);
     }
 }
 int     check_is_valid(t_start *var)
@@ -84,7 +89,7 @@ int check_is_wall_1(t_start *var, double index_x , double index_y)
 	int y = y_map;
 	while (y  < y_map + var->offset  )
 	{
-        printf( " ++++++++++++++++++++++++++ \n");  
+        // printf( " ++++++++++++++++++++++++++ \n");  
 		int x = x_map;
 		while (x < x_map + var->offset  )
 		{

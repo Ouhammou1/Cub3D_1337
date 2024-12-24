@@ -10,10 +10,12 @@
 // the libriry we delete
 # include <stdio.h>
 
+struct s_start;
 
+#define RES = 4
 # define TILE_SIZE 60
 # define FOV_ANGLE (60 * ( M_PI / 180))
-# define NUM_RAYS  var->move->width_x
+# define NUM_RAYS   1140
 // #define EPSILON 0.00001
 #define PLAYER_SPEED  15 
 // #define move_speed  10
@@ -78,6 +80,14 @@ typedef struct s_position_intersec
 	double  distance;
 	double  retur;
 }	t_position_intersec;
+
+typedef struct s_build_walls
+{
+	double pos_x;
+	double pos_y;
+	double distance;
+}	build_walls_t;
+
 typedef struct s_start
 {
 	mlx_t			*mlx;
@@ -93,6 +103,7 @@ typedef struct s_start
 	int				p_y;
 
 	int 			offset;
+	int 			len_map;
 	char			player;
 	bool			flag_up;
 	bool			flag_down;
@@ -100,6 +111,7 @@ typedef struct s_start
 	t_move_player	*move;
 	t_draw_line     *draw;
 	t_rays			*ray;
+	build_walls_t	*wall;
 	t_position_intersec *inter;
 }					t_start;
 
@@ -211,5 +223,14 @@ double normalize_angle(double angle);
 void ft_put_pixel_1(t_start *var, double x, double y);	
 void  initialize_flags(mlx_key_data_t keydata, t_start *var);
 int check_is_wall(t_start *var, double x, double y);
+void ft_put_pixel_color(t_start *var, double x, double y , int color);
+void    draw_floor_ceiling(t_start *var);
+
+
+
+
+
+
+
 
 #endif

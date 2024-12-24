@@ -6,7 +6,7 @@
 /*   By: bouhammo <bouhammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:38:12 by bouhammo          #+#    #+#             */
-/*   Updated: 2024/12/11 21:34:17 by bouhammo         ###   ########.fr       */
+/*   Updated: 2024/12/24 16:45:17 by bouhammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ void 	use_hook(mlx_key_data_t keydata, void* param)
 	// tmp_var->flag_up = false;
 	// tmp_var->flag_down = false;
 	change_deriction(keydata, tmp_var);
+
 	// initialize_flags(keydata , tmp_var);
 	if(keydata.key == MLX_KEY_W && ( keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT))
 	{
@@ -118,6 +119,7 @@ void 	use_hook(mlx_key_data_t keydata, void* param)
 		move_player(keydata, tmp_var);
 		printf(" D \n");
 	}
+
 	if(keydata.key == MLX_KEY_ESCAPE )
 	{
 		exit(EXIT_SUCCESS);
@@ -127,11 +129,14 @@ void 	use_hook(mlx_key_data_t keydata, void* param)
 
 void	initialize_move_player(t_start *var )
 {
+	var->len_map = var->len_y * TILE_SIZE;
+
 	var->move = malloc(sizeof(t_move_player));
 	var->draw = malloc(sizeof(t_draw_line));
 	var->ray = malloc(sizeof(t_rays));
 	var->inter = malloc(sizeof(t_position_intersec));
-    if (!var->move ||  !var->draw || !var->ray)
+	var->wall = (build_walls_t *)malloc((var->len_map + 1) * sizeof(build_walls_t));
+    if (!var->move ||  !var->draw || !var->ray || !var->inter || !var->wall)
 	{
         perror("Failed to allocate memory");
         exit(EXIT_FAILURE);
@@ -140,6 +145,7 @@ void	initialize_move_player(t_start *var )
 	var->move->coor_y = var->p_x * TILE_SIZE;
 	var->move->width_x = var->len_y * TILE_SIZE;
 	var->move->height_y = var->len_x * TILE_SIZE;
+
 	double angle=0;
 	if(var->player == 'N')
 	{

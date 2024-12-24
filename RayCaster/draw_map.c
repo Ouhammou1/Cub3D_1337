@@ -6,7 +6,7 @@
 /*   By: bouhammo <bouhammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 15:40:33 by bouhammo          #+#    #+#             */
-/*   Updated: 2024/12/12 20:29:32 by bouhammo         ###   ########.fr       */
+/*   Updated: 2024/12/13 21:58:37 by bouhammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,29 +80,29 @@ void	print_pixel( t_start  *var)
 		i++;
 	}
 }
-char 	 **list_map(t_start *var )
-{
-	t_start *tmp;
-	tmp = var;
+// char 	 **list_map(t_start *var )
+// {
+// 	t_start *tmp;
+// 	tmp = var;
 
-	int i =0;
-	char **list;
+// 	int i =0;
+// 	char **list;
 
-	while (tmp->map[i])
-		i++;
-	list = (char **)malloc((i + 1) * sizeof(char*));
-	if(list == NULL)
-		return NULL;
+// 	while (tmp->map[i])
+// 		i++;
+// 	list = (char **)malloc((i + 1) * sizeof(char*));
+// 	if(list == NULL)
+// 		return NULL;
 
-	i =0;
-	while (tmp->map[i])
-	{
-		list[i] = ft_strdup(tmp->map[i]);
-		i++;
-	}
-	list[i] = NULL;
-	return list;
-}
+// 	i =0;
+// 	while (tmp->map[i])
+// 	{
+// 		list[i] = ft_strdup(tmp->map[i]);
+// 		i++;
+// 	}
+// 	list[i] = NULL;
+// 	return list;
+// }
 int get_r(int rgba)
 {
     return ((rgba >> 24) & 0xFF);
