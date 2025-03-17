@@ -6,148 +6,93 @@
 /*   By: bouhammo <bouhammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 19:31:31 by bouhammo          #+#    #+#             */
-/*   Updated: 2024/12/23 10:46:22 by bouhammo         ###   ########.fr       */
+/*   Updated: 2025/03/10 00:51:41 by bouhammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub.h"
-void ft_put_pixel_color(t_start *var, double x, double y , int color)
+
+void	ft_put_pixel_color(t_start *var, double x, double y, int color)
 {
-    if (x >= 0 && x < var->move->width_x && y >= 0 && y < var->move->height_y)
-        mlx_put_pixel(var->img, x, y,   color);
+	if (x >= 0 && x < var->move->width_x && y >= 0 && y < var->move->height_y)
+		mlx_put_pixel(var->img, x, y, color);
 }
 
-void ft_put_pixel_1(t_start *var, double x, double y)
+int	check_is_wall(t_start *var, double x, double y)
 {
+	int	x_m;
+	int	y_m;
+	int	tmp;
 
-    if (x >= 0 && x < var->move->width_x && y >= 0 && y < var->move->height_y)
-        mlx_put_pixel(var->img, x, y,   0xFFFF00FF);
-    // {
-    // }
-}
-
-void ft_put_pixel(t_start *var, double x, double y)
-{
-
-    if (x >= 0 && x < var->move->width_x && y >= 0 && y < var->move->height_y)
-    {
-        mlx_put_pixel(var->img, x, y,   0xFFFFFF  ) ; // 0xFFFF00FF);
-    }
-}
-int     check_is_valid(t_start *var)
-{
-     if (var->move == NULL || var->move->coor_x < 0 || var->move->coor_y < 0 ||
-        var->move->coor_x >= var->move->width_x || var->move->coor_y >= var->move->height_y)
-    {
-        return 1;
-    }
-
-    return 0;
-}
-
-void       draw_line_dda(t_start *var)
-{   
-    if(check_is_valid(var) ==1)
-        return ;
-        
-    var->draw->new_point_x = (var->move->coor_x / TILE_SIZE) +  (cos(var->draw->angle) * TILE_SIZE);
-    var->draw->new_point_y = (var->move->coor_y / TILE_SIZE) +  (((-1) * sin(var->draw->angle)) * TILE_SIZE);
-    double dx = var->draw->new_point_x  - (var->move->coor_x / TILE_SIZE);
-    double dy = var->draw->new_point_y  - (var->move->coor_y / TILE_SIZE);
-
-    double step=0;
-    if( fabs(dx) >= fabs(dy))    
-        step = fabs(dx);
-    else   
-        step = fabs(dy);
-    if( step == 0)
-        return ;        
-    double x_inc = dx / step;
-    double y_inc = dy / step;
-    
-    double x = var->move->coor_x + (var->offset / 2);
-    double y = var->move->coor_y + (var->offset / 2);
-
-    int i=0;
-    while (i <= (step * 10)  )
-    {
-        ft_put_pixel_1(var , roundf(x) , roundf(y));
-        x += x_inc;
-        y += y_inc;
-        i++;
-    }
-}
-
-int check_is_wall_1(t_start *var, double index_x , double index_y)
-{
-    if (index_x < 0 || index_x >= var->move->width_x || index_y < 0 || index_y >= var->move->height_y)
-        return 0;
-
-    int x_map = index_x;
-    int y_map = index_y;
-
-	int y = y_map;
-	while (y  < y_map + var->offset  )
+	tmp = -5;
+	x_m = floor(x);
+	y_m = floor(y);
+	while (tmp < 5)
 	{
-        // printf( " ++++++++++++++++++++++++++ \n");  
-		int x = x_map;
-		while (x < x_map + var->offset  )
-		{
-            int map_x = (int)(x / TILE_SIZE);
-            int map_y = (int)(y / TILE_SIZE);
-            if (var->map[map_y][map_x] == '1')
-                return 0;
-			x++;
-		}
-		y++;
+		if (var->map[((y_m + tmp) / TILE_SIZE)][(x_m / TILE_SIZE)] == '1')
+			return (0);
+		tmp++;
 	}
-
-    int map_x = (int)(index_x / TILE_SIZE);
-    int map_y = (int)(index_y / TILE_SIZE);
-    if (var->map[map_y][map_x] == '1')
-        return 0;
-
-
-    // if (map_x < 0 || map_x >= var->move->width_x / TILE_SIZE || map_y < 0 || map_y >= var->move->height_y / TILE_SIZE)
-    //     return -1;
-
-    // printf(" va->map [%c] \n\n", var->map[map_y][map_x]);
- 
-    return 1;
+	tmp = -5;
+	while (tmp < 5)
+	{
+		if (var->map[(y_m / TILE_SIZE)][((x_m + tmp) / TILE_SIZE)] == '1')
+			return (0);
+		tmp++;
+	}
+	return (1);
 }
 
-void step_move(mlx_key_data_t keydata, t_start *var)
+void	check_move_player(t_start *var, double rotated_x, double rotated_y)
 {
-    double move_x = 0.0;
-    double move_y = 0.0;
+	double	x;
+	double	y;
 
-    if (keydata.key == MLX_KEY_A)
-        move_y -= PLAYER_SPEED;
-    else if (keydata.key == MLX_KEY_D)
-        move_y += PLAYER_SPEED;
-    if (keydata.key == MLX_KEY_S)
-        move_x -= PLAYER_SPEED;
-    else if (keydata.key == MLX_KEY_W)
-        move_x += PLAYER_SPEED;
-
-    double angle = var->draw->angle;
-    double rotated_x = (move_x * cos(angle)) - (move_y * sin(angle));
-    double rotated_y = (move_x * sin(angle)) + (move_y * cos(angle));
-
-    if (check_is_wall_1(var, var->move->coor_x + rotated_x, var->move->coor_y + rotated_y) == 0 )//|| check_player_in_map(var, var->move->coor_x , var->move->coor_y))
-        return;
-    var->move->coor_x += rotated_x;
-    var->move->coor_y += rotated_y;
+	x = var->move->coor_x;
+	y = var->move->coor_y;
+	if (check_is_wall(var, (x + rotated_x), (y + rotated_y)) == 0)
+		return ;
+	var->move->coor_x += rotated_x;
+	var->move->coor_y += rotated_y;
 }
 
-
-void move_player(mlx_key_data_t keydata, t_start *var)
+void	move_player(t_start *var)
 {
-    step_move(keydata, var);
- 
+	double	move_x;
+	double	move_y;
+	double	rotated_x;
+	double	rotated_y;
 
-    mlx_delete_image(var->mlx, var->img);
-    print_pixel(var);
-    print_pixel_player(var);
-    fix_rays(keydata, var);
+	move_x = 0;
+	move_y = 0;
+	if (mlx_is_key_down(var->mlx, MLX_KEY_A))
+		move_y -= PLAYER_SPEED;
+	else if (mlx_is_key_down(var->mlx, MLX_KEY_D))
+		move_y += PLAYER_SPEED;
+	if (mlx_is_key_down(var->mlx, MLX_KEY_S) || mlx_is_key_down(var->mlx,
+			MLX_KEY_DOWN))
+		move_x -= PLAYER_SPEED;
+	else if (mlx_is_key_down(var->mlx, MLX_KEY_W) || mlx_is_key_down(var->mlx,
+			MLX_KEY_UP))
+		move_x += PLAYER_SPEED;
+	rotated_x = (move_x * cos(var->draw->angle)) - (move_y
+			* sin(var->draw->angle));
+	rotated_y = (move_x * sin(var->draw->angle)) + (move_y
+			* cos(var->draw->angle));
+	check_move_player(var, rotated_x, rotated_y);
+	ft_intersection(var);
+}
+
+void	change_deriction(t_start *var)
+{
+	if (mlx_is_key_down(var->mlx, MLX_KEY_RIGHT))
+	{
+		var->draw->angle += ROTATION_SPEED;
+	}
+	else if (mlx_is_key_down(var->mlx, MLX_KEY_LEFT))
+	{
+		var->draw->angle -= ROTATION_SPEED;
+	}
+	var->draw->angle = normalize_angle(var->draw->angle);
+	ft_intersection(var);
 }

@@ -6,143 +6,120 @@
 /*   By: bouhammo <bouhammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 15:40:33 by bouhammo          #+#    #+#             */
-/*   Updated: 2024/12/13 21:58:37 by bouhammo         ###   ########.fr       */
+/*   Updated: 2025/03/15 01:39:30 by bouhammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub.h"
 
-void		ft_error()
+void	print_in_wall(t_start *var, int x_map, int y_map)
 {
-	printf("Error :\n");
-	exit(EXIT_FAILURE);
-}
+	int	k;
+	int	len;
 
-int 	ft_caracter(char  Y)
-{
-	if( Y == 'N' ||  Y == 'S' || Y == 'W'  || Y == 'E' )
-		return 1;
-	return 0;
-}
-void	print_pixel( t_start  *var)
-{
-	t_start *tmp;
-	tmp = var;
-	if (!tmp || !tmp->map)
-		ft_error();
-
-	var->img = mlx_new_image(tmp->mlx,tmp->move->width_x  , tmp->move->height_y );
-	if(!var->img || (mlx_image_to_window(tmp->mlx, tmp->img ,0 ,0) < 0))
-		ft_error();
-
-	int i=0;
-	int y_map =0;
-
-	while (var->map[i])
+	k = y_map;
+	while (k < y_map + TILE_SIZE)
 	{
-		int j =0;
-		int x_map =0; 
-
-		while (var->map[i][j])
+		len = x_map;
+		while (len < x_map + TILE_SIZE)
 		{
-			if(var->map[i][j] == '1' )
-			{
-				int k = y_map;
-				while (k < y_map + TILE_SIZE )
-				{
-					int len = x_map;
-					while (len < x_map + TILE_SIZE  )
-					{
-						mlx_put_pixel(tmp->img, len , k, 0x000004FF );
-						len++;
-					}
-					k++;
-				}
-			}
-			if(var->map[i][j] == '0' || ft_caracter(var->map[i][j]) == 1)
-			{
-				int k = y_map;
-				while (k < y_map + TILE_SIZE )
-				{
-					int len = x_map ;
-					while (len < x_map + TILE_SIZE  )
-					{
-						mlx_put_pixel(tmp->img, len , k,  0x6A5AF);
-						len++;
-					}
-					k++;
-				}
-			}
-			x_map +=TILE_SIZE;
+			mlx_put_pixel(var->img, len, k, 0x000004FF);
+			len++;
+		}
+		k++;
+	}
+}
+
+void	print_in_space(t_start *var, int x_map, int y_map)
+{
+	int	k;
+	int	len;
+
+	k = y_map;
+	while (k < y_map + TILE_SIZE)
+	{
+		len = x_map;
+		while (len < x_map + TILE_SIZE)
+		{
+			mlx_put_pixel(var->img, len, k, 0x6A5AF);
+			len++;
+		}
+		k++;
+	}
+}
+
+void	print_pixel(t_start *var)
+{
+	t_start	*tmp;
+	int		i;
+	int		y_map;
+	int		j;
+	int		x_map;
+
+	tmp = var;
+	i = 0;
+	y_map = 0;
+	while (tmp->map[i])
+	{
+		x_map = 0;
+		j = 0;
+		while (tmp->map[i][j])
+		{
+			if (tmp->map[i][j] == '1')
+				print_in_wall(tmp, x_map, y_map);
+			if (tmp->map[i][j] == '0' || ft_caracter(tmp->map[i][j]) == 1)
+				print_in_space(tmp, x_map, y_map);
+			x_map += TILE_SIZE;
 			j++;
 		}
-		y_map +=TILE_SIZE;
+		y_map += TILE_SIZE;
 		i++;
 	}
 }
-// char 	 **list_map(t_start *var )
-// {
-// 	t_start *tmp;
-// 	tmp = var;
 
-// 	int i =0;
-// 	char **list;
-
-// 	while (tmp->map[i])
-// 		i++;
-// 	list = (char **)malloc((i + 1) * sizeof(char*));
-// 	if(list == NULL)
-// 		return NULL;
-
-// 	i =0;
-// 	while (tmp->map[i])
-// 	{
-// 		list[i] = ft_strdup(tmp->map[i]);
-// 		i++;
-// 	}
-// 	list[i] = NULL;
-// 	return list;
-// }
-int get_r(int rgba)
+void	print_pixel_player(t_start *var)
 {
-    return ((rgba >> 24) & 0xFF);
-}
+	int	x_map;
+	int	y_map;
+	int	y;
+	int	x;
 
-
-void print_pixel_player(t_start *var)
-{
-	
-    if (!var || !var->img || !var->map)
-        return;
-
-    int x_map = var->move->coor_x;
-    int y_map = var->move->coor_y;
-
-	int y = y_map;
-	while (y  < y_map + var->offset)
+	if (!var || !var->img || !var->map)
+		return ;
+	x_map = var->move->coor_x;
+	y_map = var->move->coor_y;
+	y = y_map;
+	while (y < y_map + var->offset)
 	{
-		int x = x_map;
-		while (x < x_map + var->offset - 2)
+		x = x_map;
+		while (x < x_map + var->offset)
 		{
-			mlx_put_pixel(var->img, x, y , 0xFFFF00FF); 
+			mlx_put_pixel(var->img, x, y, 0xFFFF00FF);
 			x++;
 		}
 		y++;
 	}
-	
 }
 
-
-
-void	ft_game_is_over(t_start *var)
+void	ft_check_direction(t_start *var, int ray)
 {
-
-	if (!var || !var->content)
-		ft_error();
-
-	print_pixel(var);
-	print_pixel_player(var );
-    // draw_line_dda(var);
-	ft_intersection(var);
-
+	if (var->wall[ray].direction == 'v' && cos(var->wall[ray].ray_angle) < 0)
+	{
+		var->wall[ray].w_e_n_s = 'e';
+	}
+	else if (var->wall[ray].direction == 'v'
+		&& cos(var->wall[ray].ray_angle) >= 0)
+	{
+		var->wall[ray].w_e_n_s = 'w';
+	}
+	else if (var->wall[ray].direction == 'h'
+		&& sin(var->wall[ray].ray_angle) < 0)
+	{
+		var->wall[ray].w_e_n_s = 's';
+	}
+	else if (var->wall[ray].direction == 'h'
+		&& sin(var->wall[ray].ray_angle) >= 0)
+	{
+		var->wall[ray].w_e_n_s = 'n';
+	}
 }

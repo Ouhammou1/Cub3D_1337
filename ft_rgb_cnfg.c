@@ -6,7 +6,7 @@
 /*   By: rel-mora <rel-mora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 18:28:05 by rel-mora          #+#    #+#             */
-/*   Updated: 2024/11/08 19:49:03 by rel-mora         ###   ########.fr       */
+/*   Updated: 2025/03/17 15:52:11 by rel-mora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,11 @@ void	ft_check_rgb(t_start *var, t_elements *ele)
 	{
 		if (!(ele->floor[i] >= 0 && ele->floor[i] <= 255))
 		{
-			printf("%d\n", ele->floor[i]);
 			ft_put_error("Error: RGB values must be between 0 and 255.\n", var,
 				NULL);
 		}
 		if (!(ele->ceiling[i] >= 0 && ele->ceiling[i] <= 255))
 		{
-			printf("%d\n", ele->ceiling[i]);
-			printf("%d\n", i);
 			ft_put_error("Error: RGB values must be between 0 and 255.\n", var,
 				NULL);
 		}
@@ -36,19 +33,15 @@ void	ft_check_rgb(t_start *var, t_elements *ele)
 	}
 }
 
-void	ft_three_rgb(t_start *var, t_data *to)
+void	ft_three_rgb(t_start *var, t_data *to, t_data_2 *d)
 {
 	int	i;
 	int	k;
 
+	d->k = 0;
+	d->i = 0;
 	i = 0;
 	k = 0;
-	var->config.ceiling[0] = 0;
-	var->config.ceiling[1] = 0;
-	var->config.ceiling[2] = 0;
-	var->config.floor[0] = 0;
-	var->config.floor[1] = 0;
-	var->config.floor[2] = 0;
 	while (to->set[i])
 	{
 		if (to->set[i] == ',')
@@ -59,40 +52,41 @@ void	ft_three_rgb(t_start *var, t_data *to)
 		ft_put_error("Error: RGB not work like that.", var, to);
 }
 
-void	ft_free_when_exit(char *s, t_start *var, t_data *to, t_data_2 *d)
+int	ft_check_element(char **sub, t_data_2 *d)
 {
-	if (s)
-		ft_put_error(s, var, to);
-	free(d->native);
-	free_double(d->split_sub);
+	char	*trim;
+
+	trim = ft_strtrim(sub[d->i], " \t");
+	while (trim[d->j] != '\0')
+	{
+		if (!ft_isdigit(trim[d->j]))
+		{
+			free(trim);
+			return (1);
+		}
+		d->j++;
+	}
+	free(trim);
+	return (0);
 }
 
-void	ft_ini_val(int *k, int *i)
-{
-	*k = 0;
-	*i = 0;
-}
 void	ft_set_rgb(t_start *var, t_data *to, char c)
 {
 	t_data_2	d;
 
-	ft_three_rgb(var, to);
+	ft_three_rgb(var, to, &d);
 	d.native = ft_strtrim(to->set, " \t");
 	d.split_sub = ft_split(d.native, ',');
 	if (!d.split_sub)
 		ft_free_when_exit("Error: in rgb", var, to, &d);
-	ft_ini_val(&d.k, &d.i);
 	while (d.split_sub[d.i] != NULL)
 	{
 		d.j = 0;
-		while (d.split_sub[d.i][d.j] != '\0')
-		{
-			if (!ft_isdigit(d.split_sub[d.i][d.j++]))
-				ft_free_when_exit("Error: there is alpha", var, to, &d);
-		}
+		if (ft_check_element(d.split_sub, &d))
+			ft_free_when_exit("Error: there is alpha", var, to, &d);
 		if (c == 'F')
 			var->config.floor[d.k++] = ft_atoi(d.split_sub[d.i]);
-		if (c == 'C')
+		else
 			var->config.ceiling[d.k++] = ft_atoi(d.split_sub[d.i]);
 		d.i++;
 	}

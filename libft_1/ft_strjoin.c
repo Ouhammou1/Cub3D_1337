@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rel-mora <reduno96@gmail.com>              +#+  +:+       +#+        */
+/*   By: bouhammo <bouhammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 18:48:18 by rel-mora          #+#    #+#             */
-/*   Updated: 2024/11/05 21:03:34 by rel-mora         ###   ########.fr       */
+/*   Updated: 2025/03/17 16:28:40 by bouhammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@ char	*ft_strjoin(char *s1, char *s2)
 		str_final[i++] = s2[j++];
 	str_final[i] = '\0';
 	free(s1);
-	s1 = NULL;free(s2);
-	s2= NULL;
+	s1 = NULL;
+	free(s2);
+	s2 = NULL;
 	return (str_final);
 }

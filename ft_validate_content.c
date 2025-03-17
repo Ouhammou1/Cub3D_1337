@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_validate_content.c                                  :+:      :+:    :+:   */
+/*   ft_validate_content.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rel-mora <reduno96@gmail.com>              +#+  +:+       +#+        */
+/*   By: rel-mora <rel-mora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/10 17:41:14 by rel-mora          #+#    #+#             */
-/*   Updated: 2024/08/18 16:35:54 by rel-mora         ###   ########.fr       */
+/*   Created: 2025/03/17 15:52:21 by rel-mora          #+#    #+#             */
+/*   Updated: 2025/03/17 15:52:23 by rel-mora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,36 +44,35 @@ int	check_empt_line_map(char *str, int i)
 	}
 	return (0);
 }
+
 int	check_empty_line(char *joined)
 {
-	char	*str;
-	int		i;
-	int		count;
+	t_joined	info;
 
-	i = 0;
-	count = 0;
-	str = ft_strtrim(joined, "\n");
-	if (!str)
+	info.i = 0;
+	info.count = 0;
+	info.str = ft_strtrim(joined, "\n");
+	if (!info.str)
 		return (1);
-	while (str[i])
+	while (info.str[info.i])
 	{
-		if (str[i] == '\n' && count < 7)
-			i++;
-		if (str[i] != '\n' && count < 7)
+		if (info.str[info.i] == '\n' && info.count < 7)
+			info.i++;
+		if (info.str[info.i] != '\n' && info.count < 7)
 		{
-			while (str[i] && str[i] != '\n')
-				i++;
-			if (str[i] && str[i] == '\n')
-				count++;
+			while (info.str[info.i] && info.str[info.i] != '\n')
+				info.i++;
+			if (info.str[info.i] && info.str[info.i] == '\n')
+				info.count++;
 		}
-		if (count == 7)
+		if (info.count == 7)
 			break ;
 	}
-	if (check_empt_line_map(str, i))
+	if (check_empt_line_map(info.str, info.i))
 		return (1);
-	free(str);
-	return (0);
+	return (free(info.str), 0);
 }
+
 char	**ft_fill_content(char **content, char *av)
 {
 	int		fd;
@@ -95,9 +94,9 @@ char	**ft_fill_content(char **content, char *av)
 	content = ft_split(joined, '\n');
 	if (check_empty_line(joined) || !content)
 	{
-		ft_put_error("Error: emply line.\n", NULL, NULL);
 		free(joined);
 		free_double(content);
+		ft_put_error("Error: emply line.\n", NULL, NULL);
 	}
 	free(joined);
 	return (content);
@@ -112,5 +111,8 @@ void	ft_validate(char *av, t_start *var)
 		fill_map(var);
 	}
 	else
-		ft_just_print_error("Error: There is no file with the extension .cub.\n");
+	{
+		printf("Error:\n ");
+		ft_just_print_error("There is no file with the extension .cub.\n");
+	}
 }

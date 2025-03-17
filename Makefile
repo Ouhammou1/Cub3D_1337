@@ -4,21 +4,23 @@ SRCM= ./get_next_line_1/get_next_line.c \
 		ft_error.c \
 		ft_free.c \
 		ft_validate_content.c \
-		ft_validate_utils.c \
 		ft_config.c \
 		ft_map.c \
+		ft_map_2.c \
+		ft_map_utils.c \
 		ft_rgb_cnfg.c \
 		game.c \
+		ft_texture.c \
+		initialize.c \
 		RayCaster/draw_map.c   RayCaster/start_game.c   RayCaster/ft_func_maths.c RayCaster/move_plyer.c \
-		RayCaster/ft_intersection.c\
+		RayCaster/ft_intersection.c  RayCaster/build_wall.c  RayCaster/player_look.c  RayCaster/utils_intersection.c\
 
 OBJ= ${SRCM:.c=.o}
 
-CFLAGS = -Wall -Wextra -Werror  -fsanitize=address -g
+CFLAGS = -Wall -Wextra -Werror  #-fsanitize=address -g -O3
 CC = cc
 
 MLXLIB= ./MLX42/build/libmlx42.a
-# INCLUDES= ${MLXLIB} -Iinclude -ldl -lglfw -pthread -lm  
 
 INCLUDES = ./MLX42/build/libmlx42.a -framework Cocoa -framework OpenGL -framework IOKit
 

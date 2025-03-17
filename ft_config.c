@@ -6,7 +6,7 @@
 /*   By: rel-mora <rel-mora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 20:33:35 by rel-mora          #+#    #+#             */
-/*   Updated: 2024/11/08 19:48:07 by rel-mora         ###   ########.fr       */
+/*   Updated: 2025/03/17 15:51:28 by rel-mora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,14 @@ int	ft_to_space(char *trim)
 	return (i);
 }
 
-void	ft_ini_var_to(t_var *idx, t_data *to)
+void	ft_ini_var_to(t_start *var, t_var *idx, t_data *to)
 {
+	var->config.ceiling[0] = 0;
+	var->config.ceiling[1] = 0;
+	var->config.ceiling[2] = 0;
+	var->config.floor[0] = 0;
+	var->config.floor[1] = 0;
+	var->config.floor[2] = 0;
 	idx->count = 0;
 	idx->j = 0;
 	to->sub = NULL;
@@ -60,13 +66,13 @@ int	ft_set_element(t_start *var)
 	t_var	idx;
 	t_data	to;
 
-	ft_ini_var_to(&idx, &to);
+	ft_ini_var_to(var, &idx, &to);
 	while (var->config.element[idx.i] != NULL)
 	{
 		to.trim = ft_strtrim(var->config.element[idx.i], " \t");
 		idx.j = ft_to_space(to.trim);
 		to.sub = ft_substr(to.trim, 0, idx.j);
-		to.set = ft_substr(to.trim, idx.j + 1, ft_strlen(to.trim));
+		to.set = ft_substr(to.trim, idx.j, ft_strlen(to.trim));
 		if (idx.j == 1)
 			ft_config_rgb(var, &to, &idx.count);
 		else if (idx.j == 2)
